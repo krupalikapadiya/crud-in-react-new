@@ -17,10 +17,11 @@ function App() {
   function handleSubmit(e) {
     e.preventDefault();
     if (editIndex === -1) {
-      setTodos([
-        ...todos,
+      setTodos((prevState)=>{
+        return [
+        ...prevState,
         { title: inputValue, description: descriptionValue },
-      ]);
+      ]});
     } else {
       const updatedTodos = [...todos];
       updatedTodos[editIndex] = {
@@ -35,9 +36,9 @@ function App() {
   }
 
   function handleDelete(index) {
-    const deleteTodos = [...todos];
-    deleteTodos.splice(index, 1);
-    setTodos(deleteTodos);
+    const updatedTodos = [...todos];
+    updatedTodos.splice(index, 2);
+    setTodos(updatedTodos);
   }
 
   function handleEdit(index) {
@@ -73,55 +74,59 @@ function App() {
           {editIndex === -1 ? "Add Todo" : "Update Todo"}
         </button>
       </form>
-      <ul className="list-group">
+      <div className="row">
         {todos.map((todo, index) => (
-          <li className="card-body d-flex flex-row card container" key={index}>
-            {editIndex === index ? (
-              <>
-                <div className="form-group mb-3">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    onChange={handleChange}
-                    placeholder="Todo title"
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    value={descriptionValue}
-                    onChange={handleDescriptionChange}
-                    placeholder="Description"
-                    className="form-control"
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <h5 className="card-title">
-                  <strong>{todo.title}</strong>
-                </h5>
-                <p className="card-text">{todo.description}</p>
-              </>
-            )}
-            {editIndex !== index && (
-              <button
-                onClick={() => handleEdit(index)}
-                className="btn btn-warning gap-3"
-              >
-                Edit
-              </button>
-            )}
-            <button
-              onClick={() => handleDelete(index)}
-              className="btn btn-danger"
-            >
-              Delete
-            </button>
-          </li>
+          <div className="col-md-4 mb-3" key={index}>
+            <div className="card">
+              <div className="card-body">
+                {editIndex === index ? (
+                  <>
+                    <div className="form-group mb-3">
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleChange}
+                        placeholder="Todo title"
+                        className="form-control"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="text"
+                        value={descriptionValue}
+                        onChange={handleDescriptionChange}
+                        placeholder="Description"
+                        className="form-control"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h5 className="card-title">
+                      <strong>{todo.title}</strong>
+                    </h5>
+                    <p className="card-text">{todo.description}</p>
+                  </>
+                )}
+                {editIndex !== index && (
+                  <button
+                    onClick={() => handleEdit(index)}
+                    className="btn btn-warning mr-2"
+                  >
+                    Edit
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDelete(index)}
+                  className="btn btn-danger"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
